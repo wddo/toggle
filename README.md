@@ -3,7 +3,7 @@ WToggle
 jQuery base on/off toggle menu library
 
 # Initialize
-var instance = new WToggle(); // not Hanatour
+var instance = new WToggle(); // single version not Hanatour
 
 instance.init(options);
 # Getting Started
