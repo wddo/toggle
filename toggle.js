@@ -2,7 +2,7 @@
  * <toggle>
  * 
  * @author : Jo Yun Ki (wddo@hanatour.com)
- * @version : 2.0.7
+ * @version : 2.0.8
  * @since : 2015.11.09
  *
  * @classdesc
@@ -23,6 +23,7 @@
  * 2.0.5 (2017.09.05) : ins.getIndex() 추가
  * 2.0.6 (2017.10.23) : opts.event 옵션 추가하여 마우스 오버 컨트롤에 대한 대응
  * 2.0.7 (2018.03.19) : ins.setChange() 추가
+ * 2.0.8 (2018.05.25) : opts.speed 추가 
  * </pre>
  * 
  * <strong>Initialize</strong>
@@ -37,11 +38,11 @@
  */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
+    typeof define === 'function' && define.amd ? define([], factory) :
     (global.WToggle = factory());
 }(this, function () {
     'use strict';
-    var $ = (typeof Hanatour !== 'undefined' && Hanatour.jquery) || jQuery;
+    var $ = Hanatour.jquery || jQuery;
 
     var wddoObj = function () {
         var scope,
@@ -70,6 +71,7 @@
                 mustClose : false,
                 behavior : false,
                 repeat : false,
+                speed : 0,
                 content : $($.fn),
                 contentSelector : '',
                 onChange : undefined,
@@ -178,14 +180,22 @@
         function open(idx) {
             var target = (idx === undefined) ? getSelector(opts.content, opts.contentSelector) : getSelector(opts.content, opts.contentSelector).eq(idx);
 
-            target.show();
+            if (opts.speed === 0) { //add 2.0.8
+                target.show();
+            } else {
+                target.slideDown(opts.speed); //add 2.0.8
+            }
         }
 
         //컨텐츠 닫기
         function close(idx) {
             var target = (idx === undefined) ? getSelector(opts.content, opts.contentSelector) : getSelector(opts.content, opts.contentSelector).eq(idx);
             
-            target.hide();
+            if (opts.speed === 0) { //add 2.0.8
+                target.hide();
+            } else {
+                target.slideUp(opts.speed); //add 2.0.8
+            }
         }
 
         //idx를 증감 한계치 안으로 반환
@@ -213,6 +223,7 @@
              * @property {Function}         options.onChangeStart           - 텝 변경 직전 콜백함수 
              * @property {Boolean}          options.behavior=false          - 기본 비헤이비어 삭제 유무, 기본은 막음
              * @property {Boolean}          options.repeat=false            - setNext(), setPrev() 시 무한 반복 유무
+             * @property {Boolean}          options.speed=0                 - 활성화&비활성화 속도
              * 
              */
             init: function (options) {
